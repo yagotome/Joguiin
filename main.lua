@@ -27,40 +27,43 @@ function love.update(dt)
   
   if player.travado == false then
     if love.keyboard.isDown('d') then
-      if player.x < (love.graphics.getWidth() - player.img:getWidth()*0.34) then
+      local x_old = player.x
+      if player.x < (love.graphics.getWidth() - player.w) and fisica.colide(player1, player2) == false then
         player.x = player.x + (player.speed * dt)
       end
-    elseif love.keyboard.isDown('a') then
+      if fisica.colide(player1, player2) == true then
+        player.x = x_old  
+      end
+    elseif love.keyboard.isDown('a') and fisica.colide(player1, player2) == false  then    
+      local x_old = player.x
       if player.x > 0 then 
         player.x = player.x - (player.speed * dt)
       end
-    end
-
-    if love.keyboard.isDown('space') then
-      if player.y_velocity == 0 then
-        player.y_velocity = player.jump_height
+      if fisica.colide(player1, player2) == true then
+        player.x = x_old  
       end
     end
+
+    -- if love.keyboard.isDown('space') then
+    --   if player.y_velocity == 0 then
+    --     player.y_velocity = player.jump_height
+    --   end
+    -- end
   
-    if player.y_velocity ~= 0 then
-      player.y = player.y + player.y_velocity * dt
-      player.y_velocity = player.y_velocity - player.gravity * dt
-    end
+    -- if player.y_velocity ~= 0 then
+    --   player.y = player.y + player.y_velocity * dt
+    --   player.y_velocity = player.y_velocity - player.gravity * dt
+    -- end
   
-    if player.y > player.ground then
-      player.y_velocity = 0
-        player.y = player.ground
-    end
+    -- if player.y > player.ground then
+    --   player.y_velocity = 0
+    --     player.y = player.ground
+    -- end
   end
 end
 
 function love.draw()
-    love.graphics.draw(background)
-  -- if background_setado == false then
-  --   background_setado = true
-  -- end
-
-  -- love.graphics.setColor(255, 255, 255)
+  love.graphics.draw(background)
   love.graphics.draw(player1.img, player1.x, player1.y, 0, 0.34, 0.34)
   love.graphics.draw(player2.img, player2.x, player2.y, 0, 0.34, 0.34)
 end

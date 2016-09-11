@@ -10,6 +10,8 @@ exports.newPlayer = function (x, y, nome_imagem)
     player.y_velocity = 0
     player.jump_height = -300
     player.gravity = -500
+    player.w = player.img:getWidth()*0.34
+    player.h =  player.img:getHeight()*0.34
 
     return player
 end
