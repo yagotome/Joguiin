@@ -2,9 +2,12 @@ constantes =  require('constantes')
 
 local exports = {}
 
-exports.pular = function (y0, v0, t)
-    local g = constantes.fisica.gravidade
-    return y0 + v0*t + g*t*t/2
+exports.mu_s = function (s0, v, t) 
+    return s0 + v*t
+end
+
+exports.muv_s = function (s0, v0, t, a) 
+    return s0 + v0*t + a*t*t/2
 end
 
 exports.colide = function (o1, o2)

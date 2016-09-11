@@ -1,3 +1,4 @@
+Mira = require('mira')
 local exports = {}
 
 exports.newPlayer = function (x, y, nome_imagem)
@@ -12,6 +13,7 @@ exports.newPlayer = function (x, y, nome_imagem)
     player.gravity = -500
     player.w = player.img:getWidth()*0.34
     player.h =  player.img:getHeight()*0.34
+    player.mira = Mira.newMira(player.x + player.w, player.y + player.h/3)
 
     return player
 end
