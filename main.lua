@@ -18,7 +18,13 @@ function love.load()
 
   bomba = Bomba.newBomba(player)
   t = 0
-  acabou = false
+  vencedor = nil
+  obstaculo = {
+    x = 5*love.graphics.getWidth()/12 + love.graphics.getWidth()/24,
+    y = 3*love.graphics.getHeight()/5,
+    w = love.graphics.getWidth()/12,
+    h = 2*love.graphics.getHeight()/5
+  }
 end
 
 function love.keypressed(key)
@@ -28,35 +34,24 @@ function love.keypressed(key)
   end
 end
 
-function love.update(dt)
-  if love.keyboard.isDown('1') then
-    player = player1
-    bomba.atualizaPosicao(player)
-    player.travado = false
-  end
-  if love.keyboard.isDown('2') then
-    player = player2
-    bomba.atualizaPosicao(player)
-    player.travado = false
-  end
-  
+function love.update(dt)  
   if player.travado == false then
     if love.keyboard.isDown('d') then
       local x_old = player.x
-      if player.x < (love.graphics.getWidth() - player.w) and fisica.colide(player1, player2) == false then
+      if player.x < (love.graphics.getWidth() - player.w) and fisica.colide(player1, player2) == false and fisica.colide(player, obstaculo) == false then
         player.x = player.x + (player.speed * dt)
         bomba.atualizaPosicao(player)
       end
-      if fisica.colide(player1, player2) == true then
+      if fisica.colide(player1, player2) or fisica.colide(bomba, obstaculo) then
         player.x = x_old  
       end
-    elseif love.keyboard.isDown('a') and fisica.colide(player1, player2) == false  then    
+    elseif love.keyboard.isDown('a') then    
       local x_old = player.x
-      if player.x > 0 then 
+      if player.x > 0 and fisica.colide(player1, player2) == false and fisica.colide(player, obstaculo) == false then 
         player.x = player.x - (player.speed * dt)
         bomba.atualizaPosicao(player)
       end
-      if fisica.colide(player1, player2) == true then
+      if fisica.colide(player1, player2) == true or fisica.colide(bomba, obstaculo) == true then
         player.x = x_old  
       end
     -- elseif love.keyboard.isDown('w') then
@@ -94,13 +89,13 @@ function love.update(dt)
   --   bomba.atualizaPosicao(player)
   -- end
 
-  if player == player1 and fisica.colide(bomba, player2) == false and bomba.y > player.y + player.h then
+  if player == player1 and fisica.colide(bomba, player2) == false and (fisica.colide(bomba, obstaculo) or bomba.y > player.y + player.h) then
     bomba.em_movimento = false
     t = 0
     player = player2
     player.travado = false
     bomba.atualizaPosicao(player)
-  elseif player == player2 and fisica.colide(bomba, player1) == false and bomba.y > player.y + player.h then
+  elseif player == player2 and fisica.colide(bomba, player1) == false and (fisica.colide(bomba, obstaculo) or bomba.y > player.y + player.h) then
     bomba.em_movimento = false
     t = 0
     player = player1
@@ -110,12 +105,12 @@ function love.update(dt)
 
   if bomba.em_movimento == true then
     if player == player1 and fisica.colide(bomba, player2) or player == player2 and fisica.colide(bomba, player1) then
-      acabou = true
+      vencedor = player      
     end
     if (player == player1) then
-      bomba.x = fisica.mu_s(bomba.x, 100, dt)
+      bomba.x = fisica.mu_s(bomba.x, 200, dt)
     else
-      bomba.x = fisica.mu_s(bomba.x, -100, dt)
+      bomba.x = fisica.mu_s(bomba.x, -200, dt)
     end
     bomba.y = fisica.muv_s(bomba.y, -10, t, 10)
   end
@@ -123,14 +118,26 @@ function love.update(dt)
 end
 
 function love.draw()
-  if acabou then
-    love.graphics.print('Game over', love.graphics.getWidth()/2, love.graphics.getHeight()/2)
+  if vencedor ~= nil then
+    if vencedor == player1 then
+      love.graphics.print('Fim de jogo, jogador 1 venceu!', love.graphics.getWidth()/2 - 40, love.graphics.getHeight()/2 - 5)
+    else
+      love.graphics.print('Fim de jogo, jogador 2 venceu!', love.graphics.getWidth()/2 - 40, love.graphics.getHeight()/2 - 5)
+    end
   else
+    love.graphics.setColor(255, 255, 255)
     love.graphics.draw(background)
     love.graphics.draw(player1.img, player1.x, player1.y, 0, 0.34, 0.34)
     love.graphics.draw(player2.img, player2.x, player2.y, 0, 0.34, 0.34)
     -- love.graphics.draw(player1.mira.img, player1.mira.x, player1.mira.y, player1.mira.angulo, 0.34, 0.34)
     -- love.graphics.draw(player2.mira.img, player2.mira.x, player2.mira.y, player2.mira.angulo, 0.34, 0.34)
     love.graphics.draw(bomba.img, bomba.x, bomba.y, bomba.angulo, 0.12, 0.12)
+    love.graphics.setColor(45, 185, 15)
+    love.graphics.polygon('fill',
+        5*love.graphics.getWidth()/12 + love.graphics.getWidth()/24 , 3*love.graphics.getHeight()/5,
+        6*love.graphics.getWidth()/12 + love.graphics.getWidth()/24, 3*love.graphics.getHeight()/5,
+        6*love.graphics.getWidth()/12 + love.graphics.getWidth()/24, love.graphics.getHeight(),
+        5*love.graphics.getWidth()/12 + love.graphics.getWidth()/24, love.graphics.getHeight()
+    )
   end
 end
