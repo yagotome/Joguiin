@@ -13,6 +13,10 @@ exports.newBomba = function (player)
         end
         bomba.y = player.y - player.h/2 + 20
     end
+    bomba.velocidade_inicial = -200
+    bomba.resetaVelocidadeInicial = function()
+      bomba.velocidade_inicial = -200
+    end
     bomba.atualizaPosicao(player)
 
     return bomba

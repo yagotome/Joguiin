@@ -27,11 +27,31 @@ function love.load()
 end
 
 function love.keypressed(key)
-  if key == 'space' and bomba.em_movimento ~= true then
+  if key == 'space' and bomba.carregando ~= true and bomba.em_movimento ~= true then
     player.travado = true
-    bomba.em_movimento = true    
-    muv_s = fisica.muv_s(bomba.y, -900, 1200)
+    bomba.carregando = true
   end
+end
+
+function love.keyreleased(key)
+  if key == 'space' and bomba.carregando then
+    bomba.carregando = false
+    bomba.em_movimento = true
+    muv_s = fisica.muv_s(bomba.y, bomba.velocidade_inicial, constantes.fisica.gravidade)
+  end
+end
+
+function respawn()
+    bomba.carregando = false
+    bomba.em_movimento = false
+    if player == player1 then
+      player = player2
+    else
+      player = player1
+    end
+    player.travado = false
+    bomba.atualizaPosicao(player)
+    bomba.resetaVelocidadeInicial()
 end
 
 function love.update(dt)  
@@ -89,16 +109,14 @@ function love.update(dt)
   --   bomba.atualizaPosicao(player)
   -- end
 
+  if bomba.carregando and love.keyboard.isDown('space') then
+    bomba.velocidade_inicial = bomba.velocidade_inicial - 10
+  end
+
   if player == player1 and fisica.colide(bomba, player2) == false and (fisica.colide(bomba, obstaculo) or bomba.y > player.y + player.h) then
-    bomba.em_movimento = false
-    player = player2
-    player.travado = false
-    bomba.atualizaPosicao(player)
+    respawn()
   elseif player == player2 and fisica.colide(bomba, player1) == false and (fisica.colide(bomba, obstaculo) or bomba.y > player.y + player.h) then
-    bomba.em_movimento = false
-    player = player1
-    player.travado = false
-    bomba.atualizaPosicao(player)
+    respawn()
   end
   -- love.timer.sleep(0.5)
   if bomba.em_movimento == true then
@@ -136,5 +154,6 @@ function love.draw()
         6*love.graphics.getWidth()/12 + love.graphics.getWidth()/24, love.graphics.getHeight(),
         5*love.graphics.getWidth()/12 + love.graphics.getWidth()/24, love.graphics.getHeight()
     )
-  end
+    -- love.graphics.print('Velocidade inicial: ' .. (-bomba.velocidade_inicial), 100, 300)
+  end  
 end
