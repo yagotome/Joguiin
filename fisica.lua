@@ -6,10 +6,14 @@ exports.mu_s = function (s0, v, t)
     return s0 + v*t
 end
 
-exports.muv_s = function (s0)
+exports.muv_s = function (s0, v0, ac)
     local s_inicial = s0
-    return function (v0, t, a)
-        return s_inicial + v0*t + a*t*t/2        
+    local vi = v0
+    local a = ac
+    local t = 0
+    return function (dt)
+        t = t + dt
+        return s_inicial + vi*t + a*t*t/2        
     end
 end
 

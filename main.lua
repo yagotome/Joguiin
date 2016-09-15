@@ -17,7 +17,6 @@ function love.load()
   player.travado = false
 
   bomba = Bomba.newBomba(player)
-  t = 0
   vencedor = nil
   obstaculo = {
     x = 5*love.graphics.getWidth()/12 + love.graphics.getWidth()/24,
@@ -28,9 +27,10 @@ function love.load()
 end
 
 function love.keypressed(key)
-  if key == 'space' then
+  if key == 'space' and bomba.em_movimento ~= true then
     player.travado = true
-    bomba.em_movimento = true
+    bomba.em_movimento = true    
+    muv_s = fisica.muv_s(bomba.y, -900, 1200)
   end
 end
 
@@ -91,13 +91,11 @@ function love.update(dt)
 
   if player == player1 and fisica.colide(bomba, player2) == false and (fisica.colide(bomba, obstaculo) or bomba.y > player.y + player.h) then
     bomba.em_movimento = false
-    t = 0
     player = player2
     player.travado = false
     bomba.atualizaPosicao(player)
   elseif player == player2 and fisica.colide(bomba, player1) == false and (fisica.colide(bomba, obstaculo) or bomba.y > player.y + player.h) then
     bomba.em_movimento = false
-    t = 0
     player = player1
     player.travado = false
     bomba.atualizaPosicao(player)
@@ -111,11 +109,9 @@ function love.update(dt)
       bomba.x = fisica.mu_s(bomba.x, 400, dt)
     else
       bomba.x = fisica.mu_s(bomba.x, -400, dt)
-    end
-    local muv_s = fisica.muv_s(bomba.y)
-    bomba.y = muv_s(-20, t, 30)
+    end    
+    bomba.y = muv_s(dt)
   end
-  t = t + dt
 end
 
 function love.draw()
