@@ -36,7 +36,7 @@ end
 
 function love.update(dt)  
   if player.travado == false then
-    if love.keyboard.isDown('d') then
+    if love.keyboard.isDown('d') or love.keyboard.isDown('right') then
       local x_old = player.x
       if player.x < (love.graphics.getWidth() - player.w) and fisica.colide(player1, player2) == false and fisica.colide(player, obstaculo) == false then
         player.x = player.x + (player.speed * dt)
@@ -45,7 +45,7 @@ function love.update(dt)
       if fisica.colide(player1, player2) or fisica.colide(bomba, obstaculo) then
         player.x = x_old  
       end
-    elseif love.keyboard.isDown('a') then    
+    elseif love.keyboard.isDown('a') or love.keyboard.isDown('left') then    
       local x_old = player.x
       if player.x > 0 and fisica.colide(player1, player2) == false and fisica.colide(player, obstaculo) == false then 
         player.x = player.x - (player.speed * dt)
@@ -101,18 +101,19 @@ function love.update(dt)
     player = player1
     player.travado = false
     bomba.atualizaPosicao(player)
-  end  
-
+  end
+  -- love.timer.sleep(0.5)
   if bomba.em_movimento == true then
     if player == player1 and fisica.colide(bomba, player2) or player == player2 and fisica.colide(bomba, player1) then
       vencedor = player      
     end
     if (player == player1) then
-      bomba.x = fisica.mu_s(bomba.x, 200, dt)
+      bomba.x = fisica.mu_s(bomba.x, 400, dt)
     else
-      bomba.x = fisica.mu_s(bomba.x, -200, dt)
+      bomba.x = fisica.mu_s(bomba.x, -400, dt)
     end
-    bomba.y = fisica.muv_s(bomba.y, -10, t, 10)
+    local muv_s = fisica.muv_s(bomba.y)
+    bomba.y = muv_s(-20, t, 30)
   end
   t = t + dt
 end
