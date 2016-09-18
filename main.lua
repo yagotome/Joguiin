@@ -11,7 +11,10 @@ Musica_Fundo = love.audio.newSource('game.mp3')
 barra = love.graphics.newImage("BARRA.png") 
 forca = love.graphics.newImage("FORCA.png")
 escala_forca = 0
-    
+-- Nome: variável "escala_forca"
+-- Propriedade: endereço
+-- Binding time: compilação
+-- Explicação: dado que "escala_forca" é uma variável global, seu endereço já é determinado em tempo de compilação    
 
 function love.load()
 
@@ -55,8 +58,6 @@ function lancar()
    bomba.carregando = false
    bomba.em_movimento = true
    muv_s = fisica.muv_s(bomba.y, bomba.velocidade_inicial, constantes.fisica.gravidade)
-
-   
 end
 
 function love.keyreleased(key)
@@ -64,6 +65,10 @@ function love.keyreleased(key)
     lancar()
   end
 end
+-- Nome: variável "bomba.carregando"
+-- Propriedade: valor (conteúdo)
+-- Binding time: execução
+-- Explicação: dado que "bomba.carregando" é uma variável, seu valor só pode ser determinado em tempo de execução    
 
 function respawn()
     bomba.carregando = false
