@@ -1,7 +1,6 @@
 constantes = require('constantes')
 fisica = require('fisica')
 Player = require('player')
--- Mira = require('mira')
 Bomba = require('bomba')
 Arvore = require('arvore')
 g_ingame = true
@@ -30,19 +29,7 @@ function love.load()
 
   bomba = Bomba.newBomba(player)
   vencedor = nil
-  -- arvore = {
-  --   x = 5*love.graphics.getWidth()/12 + love.graphics.getWidth()/24,
-  --   y = 3*love.graphics.getHeight()/5,
-  --   w = love.graphics.getWidth()/12,
-  --   h = 2*love.graphics.getHeight()/5
-  -- }
-  
- 
- --  Musica_Fundo:setLooping(false)
-   -- love.audio.play(Musica_Fundo)
     love.audio.play(Musica_Fundo)
-    
-    --love.audio.play(Player1Wins)
 
 end
 
@@ -50,7 +37,6 @@ function love.keypressed(key)
   if key == 'space' and bomba.carregando ~= true and bomba.em_movimento ~= true then
     player.travado = true
     bomba.carregando = true
-    --escala_forca = 0
   end
 end
 
@@ -104,41 +90,8 @@ function love.update(dt)
         if fisica.colide(player1, player2) == true or fisica.colide(bomba, arvore) == true then
           player.x = x_old  
         end
-      -- elseif love.keyboard.isDown('w') then
-      --   mira.angulo = mira.angulo - 0.05
-      -- elseif love.keyboard.isDown('s') then
-      --   mira.angulo = mira.angulo + 0.05
       end
-
-      -- if love.keyboard.isDown('space') then
-      --   if player.y_velocity == 0 then
-      --     player.y_velocity = player.jump_height
-      --   end
-      -- end
-    
-      -- if player.y_velocity ~= 0 then
-      --   player.y = player.y + player.y_velocity * dt
-      --   player.y_velocity = player.y_velocity - player.gravity * dt
-      -- end
-    
-      -- if player.y > player.ground then
-      --   player.y_velocity = 0
-      --     player.y = player.ground
-      -- end
     end
-
-    -- if fisica.colide(bomba, player) == false and bomba.y > player.y + player.h then
-    --   bomba.em_movimento = false
-    --   t = 0
-    --   if player == player1 then
-    --     player = player2
-    --   else
-    --     player = player1
-    --   end 
-    --   player.travado = false    
-    --   bomba.atualizaPosicao(player)
-    -- end
-
     if bomba.carregando and love.keyboard.isDown('space') then
       bomba.velocidade_inicial = bomba.velocidade_inicial - 10
     end
@@ -148,7 +101,6 @@ function love.update(dt)
     elseif player == player2 and fisica.colide(bomba, player1) == false and (fisica.colide(bomba, arvore) or bomba.y > player.y + player.h) then
       respawn()
     end
-    -- love.timer.sleep(0.5)
     if bomba.em_movimento == true then
       if player == player1 and fisica.colide(bomba, player2) or player == player2 and fisica.colide(bomba, player1) then
             vencedor = player
@@ -172,10 +124,7 @@ function love.update(dt)
      end 
 
   end
-
 end
-  
-
 function love.draw()
   if vencedor ~= nil then
     if vencedor == player1 then
@@ -189,13 +138,9 @@ function love.draw()
     love.graphics.draw(background)
     love.graphics.draw(player1.img, player1.x, player1.y, 0, 0.34, 0.34)
     love.graphics.draw(player2.img, player2.x, player2.y, 0, 0.34, 0.34)
-    -- love.graphics.draw(player1.mira.img, player1.mira.x, player1.mira.y, player1.mira.angulo, 0.34, 0.34)
-    -- love.graphics.draw(player2.mira.img, player2.mira.x, player2.mira.y, player2.mira.angulo, 0.34, 0.34)
     love.graphics.draw(bomba.img, bomba.x, bomba.y, bomba.angulo, 0.12, 0.12)
-   --love.graphics.draw()
-   love.graphics.print('Velocidade inicial: ' .. ((bomba.velocidade_inicial)/15), 240, 1)
+   love.graphics.print('Força: ' .. (-(bomba.velocidade_inicial)/15)+1, 240, 1)
    love.graphics.draw(barra, 170,1)
-   --love.timer.sleep(0.03)
    love.graphics.draw(arvore.img,arvore.x , arvore.y)
    if escala_forca < 117 then
     escala_forca = (((-bomba.velocidade_inicial)/15))
@@ -203,8 +148,5 @@ function love.draw()
     lancar()
     end
     love.graphics.draw(forca,187,15,0,escala_forca,1)
-   
-    
-  -- love.graphics.line(0,0,400,400)
   end  
 end
