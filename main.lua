@@ -39,7 +39,10 @@ function love.keypressed(key)
     bomba.carregando = true
   end
 end
-
+-- Nome: constante 'space'
+-- Propriedade: endereço
+-- Binding time: compilação
+-- Explicação: dado que 'space' é uma constante, seu endereço é determinado em tempo de compilação
 function lancar()
    bomba.carregando = false
    bomba.em_movimento = true
@@ -127,6 +130,10 @@ function love.update(dt)
 end
 function love.draw()
   if vencedor ~= nil then
+-- Nome: Palavra reservada "nil"
+-- Propriedade: Valor
+-- Binding time: desenho
+-- Explicação: A palavra 'nil' é utilizada representação do valor nulo
     if vencedor == player1 then
       love.graphics.print('Fim de jogo, jogador 1 venceu!', love.graphics.getWidth()/2 - 40, love.graphics.getHeight()/2 - 5)
       
