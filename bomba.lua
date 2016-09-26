@@ -1,4 +1,8 @@
 local exports = {}
+-- Nome: caracteres reservado '{}'
+-- Propriedade: semantica
+-- Binding time: desenho
+-- Explicação: Por decisão de design esses caracteres são construtores de tabela(objeto).
 
 exports.newBomba = function (player)
     local bomba = {}
@@ -20,6 +24,10 @@ exports.newBomba = function (player)
     bomba.atualizaPosicao(player)
 
     return bomba
+-- Nome: Parametro player
+-- Propriedade: Tipo
+-- Binding time: Execução
+-- Explicação: player é um parametro que é recebido em tempo de execução, então seu tipo só pode determinado em tempo de execução 
 end
 
 return exports

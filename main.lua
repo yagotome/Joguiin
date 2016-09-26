@@ -22,7 +22,11 @@ function love.load()
   background_setado = false
   arvore = Arvore.newArvore()
   player1 = Player.newPlayer(1*love.graphics.getWidth()/12, constantes.ground.y, 'player_esquerda.png')
-  player2 = Player.newPlayer(10*love.graphics.getWidth()/12, constantes.ground.y, 'player_direita.png')
+  player2 = Player.newPlayer((10/12)*love.graphics.getWidth(), constantes.ground.y, 'player_direita.png')
+  -- Nome: Constante multiplicadora '10/12'
+  -- Propriedade: valor
+  -- Binding time: compilação
+  -- Explicação: Operações sobre constantes ocorrem em tempo de compilação.
 
   player = player1
   player.travado = false
