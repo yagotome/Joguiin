@@ -92,6 +92,10 @@ function love.update(dt)
         local x_old = player.x
         if player.x > 0 and fisica.colide(player1, player2) == false and fisica.colide(player, arvore) == false then 
           player.x = player.x - (player.speed * dt)
+  -- Nome: operador "*"
+  -- Propriedade: semantica
+  -- Binding time: compilação
+  -- Explicação: O operador reage de maneiras diferentes ás operações dependendo do tipo e da arquitetura.
           bomba.atualizaPosicao(player)
         end
         if fisica.colide(player1, player2) == true or fisica.colide(bomba, arvore) == true then

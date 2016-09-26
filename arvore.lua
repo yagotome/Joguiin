@@ -15,5 +15,8 @@ exports.newArvore = function()
     arvore.y = constantes.altura - arvore.h
     return arvore
 end
-
+-- Nome: palavra reservada "end"
+-- Propriedade: Nome
+-- Binding time: desenho
+-- Explicação: A escolha do nome de uma palvra chave para fechar um bloco é feita em tempo de design.
 return exports

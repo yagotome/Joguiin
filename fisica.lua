@@ -15,6 +15,10 @@ exports.muv_s = function (s0, v0, ac)
         t = t + dt
         return s_inicial + vi*t + a*t*t/2        
     end
+-- Nome: Funcao anonima 
+-- Propriedade: Endereço
+-- Binding time: Execução
+-- Explicação: Como a funcao anonima é definida no retorno da função muv_s, então o endereço só pode ser determinado em tempo de execução
 end
 
 exports.colide = function (o1, o2)
