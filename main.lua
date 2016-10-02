@@ -3,6 +3,7 @@ fisica = require('fisica')
 Player = require('player')
 Bomba = require('bomba')
 Arvore = require('arvore')
+Pombo = require('pombo')
 g_ingame = true
 Player1Wins = love.audio.newSource("Player1WINS.mp3")
 Player2Wins = love.audio.newSource("Player2WINS.mp3")
@@ -21,20 +22,33 @@ function love.load()
   background = love.graphics.newImage('mapa.png')
   background_setado = false
   arvore = Arvore.newArvore()
-  player1 = Player.newPlayer(1*love.graphics.getWidth()/12, constantes.ground.y, 'player_esquerda.png')
-  player2 = Player.newPlayer((10/12)*love.graphics.getWidth(), constantes.ground.y, 'player_direita.png')
+  players = {
+    Player.newPlayer(1*love.graphics.getWidth()/12, constantes.ground.y, 'player_esquerda.png'),
+    Player.newPlayer((10/12)*love.graphics.getWidth(), constantes.ground.y, 'player_direita.png')
+  }
   -- Nome: Constante multiplicadora '10/12'
   -- Propriedade: valor
   -- Binding time: compilação
   -- Explicação: Operações sobre constantes ocorrem em tempo de compilação.
 
-  player = player1
+  player = players[1]
   player.travado = false
 
   bomba = Bomba.newBomba(player)
   vencedor = nil
-    love.audio.play(Musica_Fundo)
 
+  pombos = { }
+  love.audio.play(Musica_Fundo)
+
+  t = 4
+end
+
+function onPomboColide(bomba)
+  for i,pombo in ipairs(pombos) do
+    if fisica.colide(bomba, pombo) then
+      table.remove(pombos, i)
+    end
+  end
 end
 
 function love.keypressed(key)
@@ -66,31 +80,42 @@ end
 function respawn()
     bomba.carregando = false
     bomba.em_movimento = false
-    if player == player1 then
-      player = player2
+    if player == players[1] then
+      player = players[2]
     else
-      player = player1
+      player = players[1]
     end
     player.travado = false
     bomba.atualizaPosicao(player)
     bomba.resetaVelocidadeInicial()
 end
 
-function love.update(dt)  
+function love.update(dt)
+  t = t + dt
+  if t > 4 then
+    pombos[#pombos+1] = Pombo.newPombo(constantes.largura - 100, 200)
+    t = 0
+  end
+  for i, pombo in ipairs(pombos) do
+    pombo.x = fisica.mu_s(pombo.x, pombo.velocidade, dt)
+    if pombo.x <= 0 then 
+      table.remove(pombos, i)
+    end
+  end
   if vencedor == nil then
     if player.travado == false then
       if love.keyboard.isDown('d') or love.keyboard.isDown('right') then
         local x_old = player.x
-        if player.x < (love.graphics.getWidth() - player.w) and fisica.colide(player1, player2) == false and fisica.colide(player, arvore) == false then
+        if player.x < (love.graphics.getWidth() - player.w) and fisica.colide(players[1], players[2]) == false and fisica.colide(player, arvore) == false then
           player.x = player.x + (player.speed * dt)
           bomba.atualizaPosicao(player)
         end
-        if fisica.colide(player1, player2) or fisica.colide(bomba, arvore) then
+        if fisica.colide(players[1], players[2]) or fisica.colide(bomba, arvore) then
           player.x = x_old  
         end
       elseif love.keyboard.isDown('a') or love.keyboard.isDown('left') then    
         local x_old = player.x
-        if player.x > 0 and fisica.colide(player1, player2) == false and fisica.colide(player, arvore) == false then 
+        if player.x > 0 and fisica.colide(players[1], players[2]) == false and fisica.colide(player, arvore) == false then 
           player.x = player.x - (player.speed * dt)
   -- Nome: operador "*"
   -- Propriedade: semantica
@@ -98,7 +123,7 @@ function love.update(dt)
   -- Explicação: O operador reage de maneiras diferentes ás operações dependendo do tipo e da arquitetura.
           bomba.atualizaPosicao(player)
         end
-        if fisica.colide(player1, player2) == true or fisica.colide(bomba, arvore) == true then
+        if fisica.colide(players[1], players[2]) == true or fisica.colide(bomba, arvore) == true then
           player.x = x_old  
         end
       end
@@ -107,16 +132,17 @@ function love.update(dt)
       bomba.velocidade_inicial = bomba.velocidade_inicial - 10
     end
 
-    if player == player1 and fisica.colide(bomba, player2) == false and (fisica.colide(bomba, arvore) or bomba.y > player.y + player.h) then
+    if player == players[1] and fisica.colide(bomba, players[2]) == false and (fisica.colide(bomba, arvore) or bomba.y > player.y + player.h) then
       respawn()
-    elseif player == player2 and fisica.colide(bomba, player1) == false and (fisica.colide(bomba, arvore) or bomba.y > player.y + player.h) then
+    elseif player == players[2] and fisica.colide(bomba, players[1]) == false and (fisica.colide(bomba, arvore) or bomba.y > player.y + player.h) then
       respawn()
     end
     if bomba.em_movimento == true then
-      if player == player1 and fisica.colide(bomba, player2) or player == player2 and fisica.colide(bomba, player1) then
+      onPomboColide(bomba)
+      if player == players[1] and fisica.colide(bomba, players[2]) or player == players[2] and fisica.colide(bomba, players[1]) then
             vencedor = player
       end
-      if (player == player1) then
+      if (player == players[1]) then
         bomba.x = fisica.mu_s(bomba.x, 400, dt)
       else
         bomba.x = fisica.mu_s(bomba.x, -400, dt)
@@ -126,7 +152,7 @@ function love.update(dt)
   else
   if g_ingame ~= false then
     love.audio.stop(Musica_Fundo)
-     if vencedor == player1 then 
+     if vencedor == players[1] then 
        love.audio.play(Player1Wins)
      else 
        love.audio.play(Player2Wins)
@@ -142,7 +168,7 @@ function love.draw()
 -- Propriedade: Valor
 -- Binding time: desenho
 -- Explicação: A palavra 'nil' é utilizada representação do valor nulo
-    if vencedor == player1 then
+    if vencedor == players[1] then
       love.graphics.print('Fim de jogo, jogador 1 venceu!', love.graphics.getWidth()/2 - 40, love.graphics.getHeight()/2 - 5)
       
     else
@@ -151,12 +177,17 @@ function love.draw()
   else
     love.graphics.setColor(255, 255, 255)
     love.graphics.draw(background)
-    love.graphics.draw(player1.img, player1.x, player1.y, 0, 0.34, 0.34)
-    love.graphics.draw(player2.img, player2.x, player2.y, 0, 0.34, 0.34)
+    love.graphics.draw(players[1].img, players[1].x, players[1].y, 0, 0.34, 0.34)
+    love.graphics.draw(players[2].img, players[2].x, players[2].y, 0, 0.34, 0.34)
     love.graphics.draw(bomba.img, bomba.x, bomba.y, bomba.angulo, 0.12, 0.12)
-   love.graphics.print('Força: ' .. (-(bomba.velocidade_inicial)/15)+1, 240, 1)
-   love.graphics.draw(barra, 170,1)
-   love.graphics.draw(arvore.img,arvore.x , arvore.y)
+    love.graphics.print('Força: ' .. (-(bomba.velocidade_inicial)/15)+1, 240, 1)
+    love.graphics.draw(barra, 170,1)
+    love.graphics.draw(arvore.img, arvore.x, arvore.y, 0, 0.5, 0.5)
+
+    --love.graphics.print('Tam: ' .. #pombos, love.graphics.getWidth()/2 - 40, love.graphics.getHeight() - 20)
+    for i, pombo in ipairs(pombos) do
+      love.graphics.draw(pombo.img, pombo.x, pombo.y, 0, 0.1, 0.1)
+    end
    if escala_forca < 117 then
     escala_forca = (((-bomba.velocidade_inicial)/15))
   elseif bomba.carregando then

@@ -9,8 +9,8 @@ exports.newArvore = function()
     -- Explicação: dado que "arvore" é uma variável local, seu endereço só pode ser determinado em tempo de execução    
 
     arvore.img = love.graphics.newImage('Arvore_normal.png')
-    arvore.w = arvore.img:getWidth()
-    arvore.h =  arvore.img:getHeight()
+    arvore.w = arvore.img:getWidth()*0.5
+    arvore.h =  arvore.img:getHeight()*0.5
     arvore.x = (constantes.largura - arvore.w)/2
     arvore.y = constantes.altura - arvore.h
     return arvore
