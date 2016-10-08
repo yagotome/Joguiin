@@ -106,6 +106,14 @@ function love.update(dt)
       table.remove(pombos, i)
     end
   end
+-- trabalho-05 
+-- Coleção: tabela pombos
+-- Escopo: Global
+-- Tempo de vida: Os elementos do array pombos passam pelo cenário do jogo sendo iterados, seu tempo de vida é variável,
+-- o primeiro elemento é criado na inicialização do jogo e os de mais são criados num intervalo de tempo constante e eles são removidos 
+-- da tabela quando chegam no final do cenário ou quando são acertados pela bomba.
+-- Alocação: Os pombos são alocados na função update em um período de tempo de aproximadamente 4 segundos.
+-- Desalocação: Os pombos são desalocados quando colidem com a bomba ou atingem o final da cenário.
   if vencedor == nil then
     if player.travado == false then
       if love.keyboard.isDown('d') or love.keyboard.isDown('right') then
