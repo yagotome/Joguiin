@@ -1,4 +1,5 @@
 local exports = {}
+-- trabalho-04
 -- Nome: caracteres reservado '{}'
 -- Propriedade: semantica
 -- Binding time: desenho
@@ -24,6 +25,7 @@ exports.newBomba = function (player)
     bomba.atualizaPosicao(player)
 
     return bomba
+-- trabalho-04
 -- Nome: Parametro player
 -- Propriedade: Tipo
 -- Binding time: Execução

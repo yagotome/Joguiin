@@ -15,6 +15,7 @@ exports.muv_s = function (s0, v0, ac)
         t = t + dt
         return s_inicial + vi*t + a*t*t/2        
     end
+-- trabalho-04
 -- Nome: Funcao anonima 
 -- Propriedade: Endereço
 -- Binding time: Execução

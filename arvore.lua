@@ -3,6 +3,7 @@ constantes = require('constantes')
 
 exports.newArvore = function()
     local arvore = {}
+    -- trabalho-04
     -- Nome: variável "arvore"
     -- Propriedade: Endereço
     -- Binding time: execução
@@ -15,6 +16,7 @@ exports.newArvore = function()
     arvore.y = constantes.altura - arvore.h
     return arvore
 end
+-- trabalho-04
 -- Nome: palavra reservada "end"
 -- Propriedade: Nome
 -- Binding time: desenho

@@ -11,6 +11,7 @@ Musica_Fundo = love.audio.newSource('game.mp3')
 barra = love.graphics.newImage("BARRA.png") 
 forca = love.graphics.newImage("FORCA.png")
 escala_forca = 0
+-- trabalho-04
 -- Nome: variável "escala_forca"
 -- Propriedade: endereço
 -- Binding time: compilação
@@ -26,6 +27,7 @@ function love.load()
     Player.newPlayer(1*love.graphics.getWidth()/12, constantes.ground.y, 'player_esquerda.png'),
     Player.newPlayer((10/12)*love.graphics.getWidth(), constantes.ground.y, 'player_direita.png')
   }
+  -- trabalho-04
   -- Nome: Constante multiplicadora '10/12'
   -- Propriedade: valor
   -- Binding time: compilação
@@ -57,6 +59,7 @@ function love.keypressed(key)
     bomba.carregando = true
   end
 end
+-- trabalho-04
 -- Nome: constante 'space'
 -- Propriedade: endereço
 -- Binding time: compilação
@@ -72,6 +75,7 @@ function love.keyreleased(key)
     lancar()
   end
 end
+-- trabalho-04
 -- Nome: variável "bomba.carregando"
 -- Propriedade: valor (conteúdo)
 -- Binding time: execução
@@ -117,6 +121,7 @@ function love.update(dt)
         local x_old = player.x
         if player.x > 0 and fisica.colide(players[1], players[2]) == false and fisica.colide(player, arvore) == false then 
           player.x = player.x - (player.speed * dt)
+  -- trabalho-04
   -- Nome: operador "*"
   -- Propriedade: semantica
   -- Binding time: compilação
@@ -164,6 +169,7 @@ function love.update(dt)
 end
 function love.draw()
   if vencedor ~= nil then
+-- trabalho-04
 -- Nome: Palavra reservada "nil"
 -- Propriedade: Valor
 -- Binding time: desenho
