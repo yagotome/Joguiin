@@ -33,6 +33,9 @@ function love.load()
   -- Binding time: compilação
   -- Explicação: Operações sobre constantes ocorrem em tempo de compilação.
 
+  -- trabalho-06
+  -- table 'players' é usada como tupla
+
   player = players[1]
   player.travado = false
 
@@ -40,6 +43,8 @@ function love.load()
   vencedor = nil
 
   pombos = { }
+  -- trabalho-06
+  -- table 'pombos' é usada como array
   love.audio.play(Musica_Fundo)
 
   t = 4
@@ -55,6 +60,8 @@ end
 
 function love.keypressed(key)
   if key == 'space' and bomba.carregando ~= true and bomba.em_movimento ~= true then
+  -- trabalho-06
+  -- variável 'key' é usada como enumeração
     player.travado = true
     bomba.carregando = true
   end
