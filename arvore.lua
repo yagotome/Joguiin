@@ -2,12 +2,15 @@ local exports = {}
 constantes = require('constantes')
 
 exports.newArvore = function()
+    local img = love.graphics.newImage('Arvore_normal.png')    
+    local w = img:getWidth()*0.5
+    local h = img:getHeight()*0.5
     local arvore = {
-        arvore.img = love.graphics.newImage('Arvore_normal.png'),
-        arvore.w = arvore.img:getWidth()*0.5,
-        arvore.h =  arvore.img:getHeight()*0.5,
-        arvore.x = (constantes.largura - arvore.w)/2,
-        arvore.y = constantes.altura - arvore.h        
+        img = img,
+        w = w,
+        h =  h,
+        x = (constantes.largura - w)/2,
+        y = constantes.altura - h        
     }
     -- trabalho-04
     -- Nome: variável "arvore"

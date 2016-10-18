@@ -51,7 +51,8 @@ function love.load()
 end
 
 function onPomboColide(bomba)
-  for i,pombo in ipairs(pombos) do
+  for i = #pombos, 1, -1 do
+    local pombo = pombos[i]
     if fisica.colide(bomba, pombo) then
       table.remove(pombos, i)
     end
@@ -107,7 +108,8 @@ function love.update(dt)
     pombos[#pombos+1] = Pombo.newPombo(constantes.largura - 100, 200)
     t = 0
   end
-  for i, pombo in ipairs(pombos) do
+  for i = #pombos, 1, -1 do
+    local pombo = pombos[i]
     pombo.x = fisica.mu_s(pombo.x, pombo.velocidade, dt)
     if pombo.x <= 0 then 
       table.remove(pombos, i)

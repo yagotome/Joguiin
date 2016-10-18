@@ -1,6 +1,6 @@
 local exports = {    
-    exports.largura = 1024,
-    exports.altura = 600
+    largura = 1024,
+    altura = 600
 }
 -- Nome: palavra reservada "local"
 -- Propriedade: semantica
