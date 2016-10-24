@@ -2,6 +2,7 @@ local exports = {
     largura = 1024,
     altura = 600
 }
+-- trabalho-04
 -- Nome: palavra reservada "local"
 -- Propriedade: semantica
 -- Binding time: desenho
@@ -14,5 +15,3 @@ exports.ground = {}
 exports.ground.y = 513
 
 return exports
--- trabalho-06
--- table 'exports' é usada como dicionário

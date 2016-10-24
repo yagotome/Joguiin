@@ -6,15 +6,18 @@ exports.mu_s = function (s0, v, t)
     return s0 + v*t
 end
 
+-- trabalho-07
 exports.muv_s = function (s0, v0, ac)
     local s_inicial = s0
     local vi = v0
     local a = ac
     local t = 0
-    return function (dt)
-        t = t + dt
-        return s_inicial + vi*t + a*t*t/2        
-    end
+    return {
+        move = function (dt)
+            t = t + dt
+            return s_inicial + vi*t + a*t*t/2        
+        end
+    }
 -- trabalho-04
 -- Nome: Funcao anonima 
 -- Propriedade: Endereço

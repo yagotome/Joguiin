@@ -38,6 +38,8 @@ function love.load()
 
   player = players[1]
   player.travado = false
+  -- trabalho-06
+  -- table 'player' é usada como dicionário (eventualmente, player pode receber novas propriedades)
 
   bomba = Bomba.newBomba(player)
   vencedor = nil
@@ -169,7 +171,7 @@ function love.update(dt)
       else
         bomba.x = fisica.mu_s(bomba.x, -400, dt)
       end    
-      bomba.y = muv_s(dt)
+      bomba.y = muv_s.move(dt)
     end
   else
   if g_ingame ~= false then
