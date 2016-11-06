@@ -100,6 +100,7 @@ function respawn()
     player.travado = false
     bomba.atualizaPosicao(player)
     bomba.resetaVelocidadeInicial()
+    escala_forca = 0
 end
 
 function love.update(dt)
@@ -192,8 +193,7 @@ function love.draw()
 -- Binding time: desenho
 -- Explicação: A palavra 'nil' é utilizada representação do valor nulo
     if vencedor == players[1] then
-      love.graphics.print('Fim de jogo, jogador 1 venceu!', love.graphics.getWidth()/2 - 40, love.graphics.getHeight()/2 - 5)
-      
+      love.graphics.print('Fim de jogo, jogador 1 venceu!', love.graphics.getWidth()/2 - 40, love.graphics.getHeight()/2 - 5)      
     else
       love.graphics.print('Fim de jogo, jogador 2 venceu!', love.graphics.getWidth()/2 - 40, love.graphics.getHeight()/2 - 5)
     end
@@ -211,11 +211,13 @@ function love.draw()
     for i, pombo in ipairs(pombos) do
       love.graphics.draw(pombo.img, pombo.x, pombo.y, 0, 0.1, 0.1)
     end
-   if escala_forca < 117 then
-    escala_forca = (((-bomba.velocidade_inicial)/15))
-  elseif bomba.carregando then
-    lancar()
+    if bomba.carregando then
+      if escala_forca < 117 then
+        escala_forca = (((-bomba.velocidade_inicial)/15))
+      else        
+        lancar()
+      end
     end
     love.graphics.draw(forca,187,15,0,escala_forca,1)
-  end  
+  end
 end
