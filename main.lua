@@ -38,8 +38,6 @@ function love.load()
 
   player = players[1]
   player.travado = false
-  -- trabalho-06
-  -- table 'player' é usada como dicionário (eventualmente, player pode receber novas propriedades)
 
   bomba = Bomba.newBomba(player)
   vencedor = nil
