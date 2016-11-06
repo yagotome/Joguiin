@@ -47,7 +47,7 @@ function love.load()
   -- table 'pombos' é usada como array
   love.audio.play(Musica_Fundo)
 
-  t = 4
+  t = 6
 end
 
 function onPomboColide(bomba)
@@ -105,13 +105,37 @@ end
 
 function love.update(dt)
   t = t + dt
-  if t > 4 then
+  if t > 6 then
     pombos[#pombos+1] = Pombo.newPombo(constantes.largura - 100, 200)
     t = 0
   end
   for i = #pombos, 1, -1 do
     local pombo = pombos[i]
-    pombo.x = fisica.mu_s(pombo.x, pombo.velocidade, dt)
+    -- trabalho-07 - inicio
+    if pombo.estadoMovimento == nil then
+      pombo.estadoMovimento = pombo.atualizaEstadoMovimento()          
+      pombo.distanciaPercorrida = 0
+    end
+    if (pombo.estadoMovimento == 'left' or pombo.estadoMovimento == 'right') then
+      if pombo.distanciaPercorrida >= 300 then
+        pombo.estadoMovimento = pombo.atualizaEstadoMovimento()
+        pombo.distanciaPercorrida = 0
+      else
+        local s0 = math.abs(pombo.x) 
+        pombo.move(pombo.estadoMovimento, dt)
+        pombo.distanciaPercorrida = pombo.distanciaPercorrida + math.abs(pombo.x - s0)
+      end
+    elseif (pombo.estadoMovimento == 'up' or pombo.estadoMovimento == 'down') then
+      if pombo.distanciaPercorrida >= 140 then
+        pombo.estadoMovimento = pombo.atualizaEstadoMovimento()
+        pombo.distanciaPercorrida = 0
+      else
+        local s0 = math.abs(pombo.y) 
+        pombo.move(pombo.estadoMovimento, dt)
+        pombo.distanciaPercorrida = pombo.distanciaPercorrida + math.abs(pombo.y - s0)
+      end
+    end
+    -- trabalho-07 - fim
     if pombo.x <= 0 then 
       table.remove(pombos, i)
     end
